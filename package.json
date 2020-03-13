@@ -1,0 +1,24 @@
+{
+  "name": "serverless-project",
+  "version": "1.0.0",
+  "description": "Take home project for VoiceFoundry interview",
+  "main": "handler.js",
+  "dependencies": {
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test",
+    "deploy": "sls deploy && aws s3 cp ./data/ s3://vf-sls-data/ --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bencassidy/serverless-project.git"
+  },
+  "author": "ben.cassidy11@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bencassidy/serverless-project/issues"
+  },
+  "homepage": "https://github.com/bencassidy/serverless-project#readme"
+}

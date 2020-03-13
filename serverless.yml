@@ -1,36 +1,34 @@
 service: vf-project
 
 # app and org for use with dashboard.serverless.com
-app: vf-project
-org: bencassidy
-
-provider:
-  name: aws
-  runtime: nodejs12.x
+#app: vf-project
+#org: bencassidy
 
 # you can overwrite defaults here
 #  stage: dev
 #  region: us-east-1
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
-
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
+provider:
+  name: aws
+  runtime: nodejs12.x
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:GetObject"
+      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "DataBucket" }, "/*" ] ]  }
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:BatchWriteItem"
+      Resource: { "Fn::Join" : ["", ["arn:aws:dynamodb:us-east-1:*:table/", { "Ref" : "DataTable" } ] ]  }
+    - Effect: "Allow"
+      Action:
+        - "s3:PutObject"
+      Resource:
+        Fn::Join:
+          - ""
+          - - "arn:aws:s3:::"
+            - "Ref" : "ServerlessDeploymentBucket"
+            - "/*"
 
 # you can add packaging information here
 #package:
@@ -42,8 +40,8 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
+  processData:
+    handler: handler.process
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -80,10 +78,6 @@ functions:
 #            host: example.com
 #            path: /hello
 
-#    Define function environment variables here
-#    environment:
-#      variable2: value2
-
 resources:
   Resources:
     DataBucket:
@@ -93,20 +87,20 @@ resources:
     DataTable:
         Type: AWS::DynamoDB::Table
         Properties:
-          TableName: vf-customer-list
+          TableName: episodes
           AttributeDefinitions:
             -
-              AttributeName: "UserId"
-              AttributeType: "N"
+              AttributeName: "EpisodeId"
+              AttributeType: "S"
             -
-              AttributeName: "SubscriptionCode"
-              AttributeType: "N"
+              AttributeName: "EpisodeTitle"
+              AttributeType: "S"
           KeySchema:
             -
-              AttributeName: "UserId"
+              AttributeName: "EpisodeId"
               KeyType: "HASH"
             -
-              AttributeName: "SubscriptionCode"
+              AttributeName: "EpisodeTitle"
               KeyType: "RANGE"
           BillingMode: PROVISIONED
           ProvisionedThroughput:
