@@ -8,7 +8,7 @@ module.exports.process = async event => {
   async function getEpisodeList() {
     const file = await s3.getObject({
       Bucket: "vf-sls-data",
-      Key: "episodeList-1.json"
+      Key: "episodeList.json"
     }).promise();
 
     return JSON.parse(file.Body);

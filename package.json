@@ -4,9 +4,9 @@
   "description": "Take home project for VoiceFoundry interview",
   "main": "handler.js",
   "dependencies": {
+    "aws-sdk": "^2.639.0",
     "lodash": "^4.17.15"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "test",
     "deploy": "sls deploy && aws s3 cp ./data/ s3://vf-sls-data/ --recursive"
