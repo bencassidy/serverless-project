@@ -44,9 +44,7 @@ module.exports.process = async event => {
   try {
     const episodeList = await getEpisodeList();
     const episodeListChunk = chunk(episodeList, 25);
-
     const formattedChunkList = episodeListChunk.map(chunk => formatData(chunk));
-    // await ddb.batchWriteItem(formattedChunk).promise();
 
     const response = await Promise.all(formattedChunkList.map(chunk => ddb.batchWriteItem(chunk).promise()));
 
